@@ -1,1 +1,33 @@
-(function(){const s=document.currentScript,base=s&&s.dataset.base?s.dataset.base:"";document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll(".elementor-element-a6692a5 a").forEach(function(a){a.href=base+"contacts/index.html";const t=a.querySelector(".elementor-widget-cmsmasters-button__text");if(t)t.textContent="Contacto"});const team=document.querySelector(".cmsmasters-blog__posts");if(team){[["cmsms_profile_category-marcos-gomez-calderon","Marcos Gomez Calderon"],["cmsms_profile_category-wilmer-ballen","Wilmer Ballen"],["cmsms_profile_category-alex-smith-araque","Alex Smith Araque"]].forEach(function(r){const card=team.querySelector("."+r[0]);if(card){const t=card.querySelector(".cmsmasters-blog__post-title a,.cmsmasters-blog__post-title,.entry-title a,.entry-title");if(t)t.textContent=r[1];team.appendChild(card)}})}const wa=document.createElement("a");wa.className="vz-whatsapp";wa.href="https://wa.me/573178873523?text=Hola%20Valorize%20I%26E%2C%20quiero%20conversar%20sobre%20un%20proyecto.";wa.target="_blank";wa.rel="noopener";wa.setAttribute("aria-label","Hablar por WhatsApp");wa.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.64.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.64-2.05-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.49s1.07 2.89 1.22 3.09c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.19 1.87.12.57-.08 1.76-.72 2.01-1.42.25-.7.25-1.3.17-1.42-.07-.13-.27-.2-.57-.35M12.04 21.5h-.01a9.4 9.4 0 0 1-4.79-1.31l-.34-.2-3.56.93.95-3.47-.22-.36a9.45 9.45 0 1 1 7.97 4.41m8.03-17.42A11.29 11.29 0 0 0 12.03.75C5.8.75.73 5.82.73 12.05c0 1.99.52 3.93 1.5 5.64L.64 23.5l5.95-1.56a11.3 11.3 0 0 0 5.44 1.39h.01c6.23 0 11.3-5.07 11.3-11.3 0-3.02-1.16-5.85-3.27-7.95"/></svg><span>WhatsApp</span>';document.body.appendChild(wa)})})();
+(function(){
+ const s=document.currentScript,base=s&&s.dataset.base?s.dataset.base:"";
+ const map={
+  "/":"index.html","/our-services/":"our-services/index.html","/sobre-nosotros/":"sobre-nosotros/index.html",
+  "/nuestro-equipo/":"nuestro-equipo/index.html","/contacts/":"contacts/index.html",
+  "/services/captura-del-valor-del-suelo-catastro-e-infraestructura/":"our-services/index.html#post-40278",
+  "/services/analisis-economico-territorial-y-eficiencia-fiscal/":"our-services/index.html#post-40114",
+  "/services/planeacion-estrategica-del-desarrollo-urbano-y-regional/":"our-services/index.html#post-40277",
+  "/services/finanzas-publicas-territoriales-y-modelos-de-gestion-financiera/":"our-services/index.html#post-41418",
+  "/cmsms_profile/wilmer-ballen/":"nuestro-equipo/index.html#equipo",
+  "/cmsms_profile/alex-smith-araque/":"nuestro-equipo/index.html#equipo",
+  "/cmsms_profile/marcos-gomez-calderon/":"nuestro-equipo/index.html#equipo"
+ };
+ const local=p=>base+(map[p]||"index.html");
+ document.addEventListener("DOMContentLoaded",()=>{
+  document.querySelectorAll(".elementor-invisible").forEach(e=>e.classList.remove("elementor-invisible"));
+  document.querySelectorAll("a").forEach(a=>{
+   const raw=a.getAttribute("href")||"",txt=(a.textContent||"").replace(/\s+/g," ").trim().toLowerCase();
+   if(/^https?:\/\/(?:www\.)?valorizeie\.com\//i.test(raw)){try{a.href=local(new URL(raw).pathname)}catch(e){a.href=local("/")}}
+   if(!a.getAttribute("href")||a.getAttribute("href")==="#"){
+    if(txt==="inicio")a.href=base+"index.html";
+    else if(txt==="servicios")a.href=base+"our-services/index.html";
+    else if(txt==="nosotros")a.href=base+"sobre-nosotros/index.html";
+    else if(txt==="nuestro equipo")a.href=base+"nuestro-equipo/index.html";
+    else if(txt==="contacto"||txt==="contáctanos"||txt==="contácto")a.href=base+"contacts/index.html";
+   }
+  });
+  document.querySelectorAll(".elementor-element-a6692a5 a").forEach(a=>{a.href=base+"contacts/index.html";const t=a.querySelector(".elementor-widget-cmsmasters-button__text");if(t)t.textContent="Contacto"});
+  const team=document.querySelector(".cmsmasters-blog__posts");
+  if(team)[["cmsms_profile_category-marcos-gomez-calderon","Marcos Gomez Calderon"],["cmsms_profile_category-wilmer-ballen","Wilmer Ballen"],["cmsms_profile_category-alex-smith-araque","Alex Smith Araque"]].forEach(r=>{const card=team.querySelector("."+r[0]);if(card){const t=card.querySelector(".cmsmasters-blog__post-title a,.cmsmasters-blog__post-title,.entry-title a,.entry-title");if(t)t.textContent=r[1];team.appendChild(card)}});
+  if(!document.querySelector(".vz-whatsapp")){const w=document.createElement("a");w.className="vz-whatsapp";w.href="https://wa.me/573178873523?text=Hola%20Valorize%20I%26E%2C%20quiero%20conversar%20sobre%20un%20proyecto.";w.target="_blank";w.rel="noopener";w.innerHTML="<span>WhatsApp</span>";document.body.appendChild(w)}
+ });
+})();
