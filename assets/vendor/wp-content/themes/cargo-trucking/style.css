@@ -1,0 +1,24 @@
+@charset "UTF-8";
+/*
+Theme Name: Cargo Trucking
+Theme URI: https://cargo-trucking.cmsmasters.net/
+Author: cmsmasters
+Author URI: https://cmsmasters.net/
+Description: Cargo Trucking – Logistics Services & Transportation WordPress Theme is a modern and powerful solution designed for freight companies, transport businesses, and logistics providers. Featuring service showcases, driver and team profiles, and full WooCommerce integration, this theme offers everything you need to present your company, manage inquiries, and sell logistics-related services or products online.
+Version: 1.0.2
+Tested up to: 6.6
+Requires PHP: 7.4
+License:
+License URI:
+Text Domain: cargo-trucking
+Domain Path: /theme-config/languages
+Copyright: cmsmasters 2024 / All Rights Reserved
+Tags: one-column, two-columns, three-columns, four-columns, left-sidebar, right-sidebar, custom-background, custom-colors, custom-header, custom-menu, editor-style, featured-image-header, featured-images, flexible-header, full-width-template, microformats, post-formats, rtl-language-support, sticky-post, theme-options, threaded-comments, translation-ready
+*/
+
+
+.sticky,
+.bypostauthor,
+.screen-reader-text {
+  outline: none;
+}
