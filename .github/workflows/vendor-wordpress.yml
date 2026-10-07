@@ -1,0 +1,35 @@
+name: Vendor WordPress assets
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/vendor_wordpress.py"
+      - ".github/workflows/vendor-wordpress.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  mirror:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Mirror WordPress pages and assets
+        run: python3 scripts/vendor_wordpress.py
+
+      - name: Commit generated static mirror
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html our-services sobre-nosotros nuestro-equipo contacts assets MIGRATION_REPORT.md
+          if git diff --cached --quiet; then
+            echo "No generated changes."
+          else
+            git commit -m "Vendor WordPress assets into static site"
+            git push
+          fi
