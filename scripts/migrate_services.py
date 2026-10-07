@@ -170,8 +170,8 @@ def service_page(slug: str, source_url: str):
     target.parent.mkdir(parents=True, exist_ok=True)
     html = fetch(source_url).decode("utf-8", "replace")
     html = strip_wp_runtime(html)
-    html = rewrite_internal_links(html, target)
     html = localize_html_assets(html, source_url, target)
+    html = rewrite_internal_links(html, target)
 
     canonical = f"https://creatiart99.github.io/valorizeie/services/{slug}/"
     html = re.sub(

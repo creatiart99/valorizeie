@@ -1,0 +1,25 @@
+name: Fix services static v2
+
+on:
+  push:
+    branches: [fix-services-static-v2]
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Rebuild service detail pages
+        run: python3 scripts/migrate_services.py
+      - name: Commit rebuilt service pages
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html our-services sobre-nosotros nuestro-equipo contacts services assets scripts/migrate_services.py
+          git commit -m "Rebuild service pages with local assets" || true
+          git push origin HEAD:main
