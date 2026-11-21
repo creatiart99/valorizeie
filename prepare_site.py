@@ -470,6 +470,8 @@ def clean_html(path):
     # Replace CMS runtime loaders whose asynchronous chunks were not mirrored.
     retired_scripts=r'(?:elementor-webpack-runtime-js|elementor-frontend-modules-js|elementor-frontend-js|elementor-pro-webpack-runtime-js|elementor-pro-frontend-js|pro-elements-handlers-js|cmsmasters-webpack-runtime-js|cmsmasters-frontend-js|cargo-trucking-frontend-js|forminator-[^"\']+)'
     data=re.sub(r'<script\b[^>]*\bid=["\']'+retired_scripts+r'["\'][^>]*>.*?</script>','',data,flags=re.I|re.S)
+    data=re.sub(r'<script\b[^>]*>.*?</script>',lambda m:'' if 'runForminatorFront' in m.group(0) else m.group(0),data,flags=re.I|re.S)
+    data=re.sub(r'<form\b[^>]*\bid=["\']forminator-[^"\']+["\'][^>]*>.*?</form>','',data,flags=re.I|re.S)
     # The mirrored CMS popup is unavailable; provide a real accessible mobile menu.
     data=re.sub(r'<a\b[^>]*>(\s*<i\b[^>]*\bcmsms-demo-icon-menu\b[^>]*></i>\s*)</a>',lambda m:'<button type="button" class="elementor-icon vz-menu-toggle" aria-label="Abrir menú" aria-controls="vz-mobile-nav" aria-expanded="false">'+m.group(1)+'</button>',data,flags=re.I|re.S)
     data=re.sub(r'href=(["\'])(.*?)\1',lambda m:replace_href(m,path),data,flags=re.I|re.S)
