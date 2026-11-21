@@ -27,10 +27,18 @@ jobs:
         uses: actions/configure-pages@v5
         with:
           enablement: true
+      - name: Prepare clean URLs and legal pages
+        run: python3 prepare_site.py
+      - name: Validate custom JavaScript
+        run: |
+          node --check _site/assets/valorize-overrides.js
+          node --check _site/assets/url-cleanup.js
+          node --check _site/assets/privacy-preferences.js
       - name: Upload static site
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
