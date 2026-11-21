@@ -9,6 +9,7 @@ from html import escape, unescape
 from html.parser import HTMLParser
 from urllib.parse import urljoin, urlsplit, urlunsplit, unquote
 import json
+import hashlib
 import re
 import shutil
 
@@ -363,8 +364,12 @@ LEGAL_CSS = r'''
 .vl-page{margin:0;background:#f6f8f7;color:var(--vl-ink);font:400 17px/1.75 Manrope,Arial,sans-serif}.vl-page *{box-sizing:border-box}.vl-page a{color:#345d1c;text-underline-offset:4px}.vl-header{background:#fff;border-bottom:1px solid var(--vl-line);padding:24px max(24px,calc((100% - 1180px)/2));display:flex;gap:24px;justify-content:space-between;align-items:center}.vl-brand{font-size:23px;font-weight:800;letter-spacing:-.03em;color:var(--vl-ink)!important;text-decoration:none}.vl-header nav{display:flex;flex-wrap:wrap;gap:22px;font-size:15px}.vl-header nav a{color:var(--vl-ink)}.vl-main{max-width:1180px;margin:auto;padding:64px 24px 88px}.vl-kicker{font-size:14px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--vl-green)}.vl-page h1{max-width:960px;font-size:clamp(36px,5vw,58px);line-height:1.08;letter-spacing:-.04em;margin:14px 0 24px}.vl-intro{max-width:900px;font-size:20px;color:#4b5b67}.vl-updated{font-size:14px;color:#576975;margin:24px 0 38px}.vl-layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:42px;align-items:start}.vl-toc{position:sticky;top:24px;background:#fff;border:1px solid var(--vl-line);border-radius:14px;padding:22px;font-size:14px}.vl-toc strong{display:block;margin-bottom:12px}.vl-toc a{display:block;color:var(--vl-ink);margin:10px 0}.vl-content{background:#fff;border:1px solid var(--vl-line);border-radius:18px;padding:38px;min-width:0}.vl-content section{scroll-margin-top:24px}.vl-content h2{font-size:25px;line-height:1.3;margin:0 0 18px;color:var(--vl-ink)}.vl-content section+section{border-top:1px solid var(--vl-line);margin-top:32px;padding-top:32px}.vl-content p{margin:0 0 18px}.vl-content ul{padding-left:24px;margin:0 0 20px}.vl-content li+li{margin-top:10px}.vl-links{display:flex;flex-wrap:wrap;gap:12px 22px;margin-top:18px}.vl-table-wrap{overflow:auto}.vl-content table{width:100%;border-collapse:collapse;font-size:15px;margin:20px 0}.vl-content th,.vl-content td{text-align:left;vertical-align:top;border:1px solid var(--vl-line);padding:13px;min-width:150px}.vl-content th{background:var(--vl-soft)}.vl-source-note{margin-top:30px;font-size:14px;color:#576975}.vl-error{max-width:780px;margin:auto;padding:100px 24px}.vl-error nav{display:flex;gap:24px;flex-wrap:wrap}
 @media(max-width:800px){.vl-header{align-items:flex-start;flex-direction:column}.vl-header nav{gap:14px 20px}.vl-main{padding-top:42px}.vl-layout{grid-template-columns:1fr;gap:24px}.vl-toc{position:static}.vl-content{padding:25px 20px}.vz-cookie{left:14px;bottom:14px;width:calc(100vw - 28px);padding:20px}.vz-cookie-actions{display:grid;grid-template-columns:1fr 1fr}.vz-cookie button{padding:11px}.vz-legal-footer nav{gap:12px 22px}.vz-cookie-visible .vz-whatsapp{bottom:calc(var(--vz-cookie-height,280px) + 24px)}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}}
-.vz-menu-toggle{border:0!important;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.vz-menu-toggle{border:0!important;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;background:#fff!important;color:#132d43!important;border-radius:50%}
 .vz-mobile-nav{border:1px solid var(--vl-line);border-radius:18px;padding:26px;width:min(420px,calc(100vw - 32px));max-height:calc(100dvh - 32px);box-sizing:border-box;overflow:auto;background:#fff;color:var(--vl-ink);font:400 18px/1.5 Manrope,Arial,sans-serif}.vz-mobile-nav::backdrop{background:#071a38b3}.vz-mobile-nav header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}.vz-mobile-nav h2{font:700 23px/1.3 Manrope,Arial,sans-serif;margin:0;color:var(--vl-ink)}.vz-mobile-nav button{border:1px solid var(--vl-line);border-radius:8px;background:#fff;color:var(--vl-ink);font:600 15px/1.3 Manrope,Arial,sans-serif;min-height:44px;padding:10px 14px;cursor:pointer}.vz-mobile-nav nav{display:grid;gap:8px}.vz-mobile-nav nav a{color:var(--vl-ink);background:#f4f7f3;border-radius:8px;padding:13px 16px;text-decoration:none;font:600 18px/1.5 Manrope,Arial,sans-serif}.vz-mobile-nav a:focus-visible,.vz-mobile-nav button:focus-visible,.vz-menu-toggle:focus-visible{outline:3px solid #457120;outline-offset:3px}
+.vz-faq-answer[hidden]{display:none!important}.vz-faq-answer:not([hidden]){display:block!important}
+.elementor-widget-cmsmasters-blog-slider .swiper{overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x mandatory}.elementor-widget-cmsmasters-blog-slider .swiper-wrapper{display:flex!important;gap:30px;transform:none!important;transition:none!important;height:auto!important;align-items:stretch}.elementor-widget-cmsmasters-blog-slider .swiper-slide{flex:0 0 calc((100% - 60px)/3);width:calc((100% - 60px)/3)!important;height:auto;scroll-snap-align:start}
+@media(max-width:1180px){.elementor-widget-cmsmasters-blog-slider .swiper-slide{flex-basis:calc((100% - 30px)/2);width:calc((100% - 30px)/2)!important}}
+@media(max-width:767px){.elementor-widget-cmsmasters-blog-slider .swiper-slide{flex-basis:100%;width:100%!important}}
 '''
 
 CLEAN_JS = r'''
@@ -392,6 +397,13 @@ CONSENT_JS = r'''
     document.querySelectorAll('[data-cookie-status]').forEach(function(e){e.textContent=optional?'Preferencia guardada: aceptar. No hay herramientas opcionales activas.':'Preferencia guardada: solo almacenamiento necesario.';});
   }
   function ready(){
+    document.querySelectorAll('.elementor-widget-cmsmasters-toggles__title[aria-controls]').forEach(function(title){
+      var answer=document.getElementById(title.getAttribute('aria-controls'));if(!answer)return;
+      title.setAttribute('role','button');title.setAttribute('tabindex','0');answer.classList.add('vz-faq-answer');answer.hidden=title.getAttribute('aria-expanded')!=='true';
+      title.addEventListener('click',function(e){e.preventDefault();var open=title.getAttribute('aria-expanded')==='true';title.setAttribute('aria-expanded',String(!open));title.classList.toggle('elementor-active',!open);answer.hidden=open;});
+      title.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();title.click();}});
+    });
+    document.querySelectorAll('.elementor-widget-cmsmasters-blog-slider .swiper').forEach(function(slider){slider.setAttribute('tabindex','0');slider.setAttribute('role','region');slider.setAttribute('aria-label','Galería de equipo y servicios; desplázate para ver más');});
     var menu=document.querySelector('#vz-mobile-nav');
     var menuButtons=document.querySelectorAll('.vz-menu-toggle');
     if(menu&&menuButtons.length){
@@ -416,9 +428,10 @@ CONSENT_JS = r'''
 '''
 
 FOOTER = '''<footer class="vz-legal-footer"><nav aria-label="Información legal"><a href="/privacidad/">Privacidad y datos personales</a><a href="/habeas-data/">Hábeas data</a><a href="/politica-de-cookies/">Política de cookies</a><a href="/terminos-de-uso/">Aviso legal y términos de uso</a><button type="button" data-cookie-settings>Preferencias de cookies</button></nav><p>VALORIZE I&amp;E S.A.S. · <a href="mailto:valorizeie@gmail.com">valorizeie@gmail.com</a> · <a href="tel:+573178873523">+57 317 887 3523</a></p></footer>'''
-HEAD_EXTRA = '<script src="/assets/url-cleanup.js"></script><link rel="stylesheet" href="/assets/site-legal.css">'
+ASSET_VERSION = hashlib.sha256((LEGAL_CSS+CLEAN_JS+CONSENT_JS).encode()).hexdigest()[:12]
+HEAD_EXTRA = '<script src="/assets/url-cleanup.js?v='+ASSET_VERSION+'"></script><link rel="stylesheet" href="/assets/site-legal.css?v='+ASSET_VERSION+'">'
 MOBILE_NAV = '<dialog id="vz-mobile-nav" class="vz-mobile-nav" aria-labelledby="vz-menu-title"><header><h2 id="vz-menu-title">Menú</h2><button type="button" data-menu-close>Cerrar menú</button></header><nav aria-label="Navegación móvil"><a href="/">Inicio</a><a href="/our-services/">Servicios</a><a href="/sobre-nosotros/">Nosotros</a><a href="/nuestro-equipo/">Nuestro equipo</a><a href="/contacts/">Contacto</a></nav></dialog>'
-BODY_EXTRA = FOOTER + MOBILE_NAV + '<script src="/assets/privacy-preferences.js" defer></script>'
+BODY_EXTRA = FOOTER + MOBILE_NAV + '<script src="/assets/privacy-preferences.js?v='+ASSET_VERSION+'" defer></script>'
 
 def page_path(path):
     relative=path.relative_to(OUT).as_posix()
@@ -454,6 +467,9 @@ def clean_html(path):
     data=data.replace('https://creatiart99.github.io/valorizeie/','https://valorizeie.com/')
     data=re.sub(r'<script\b[^>]*\bsrc=["\'][^"\']*/(?:woocommerce|sourcebuster|js-cookie)/[^"\']+["\'][^>]*>.*?</script>','',data,flags=re.I|re.S)
     data=re.sub(r'<script\b[^>]*\bid=["\']wc-order-attribution[^"\']*["\'][^>]*>.*?</script>','',data,flags=re.I|re.S)
+    # Replace CMS runtime loaders whose asynchronous chunks were not mirrored.
+    retired_scripts=r'(?:elementor-webpack-runtime-js|elementor-frontend-modules-js|elementor-frontend-js|elementor-pro-webpack-runtime-js|elementor-pro-frontend-js|pro-elements-handlers-js|cmsmasters-webpack-runtime-js|cmsmasters-frontend-js|cargo-trucking-frontend-js|forminator-[^"\']+)'
+    data=re.sub(r'<script\b[^>]*\bid=["\']'+retired_scripts+r'["\'][^>]*>.*?</script>','',data,flags=re.I|re.S)
     # The mirrored CMS popup is unavailable; provide a real accessible mobile menu.
     data=re.sub(r'<a\b[^>]*>(\s*<i\b[^>]*\bcmsms-demo-icon-menu\b[^>]*></i>\s*)</a>',lambda m:'<button type="button" class="elementor-icon vz-menu-toggle" aria-label="Abrir menú" aria-controls="vz-mobile-nav" aria-expanded="false">'+m.group(1)+'</button>',data,flags=re.I|re.S)
     data=re.sub(r'href=(["\'])(.*?)\1',lambda m:replace_href(m,path),data,flags=re.I|re.S)
